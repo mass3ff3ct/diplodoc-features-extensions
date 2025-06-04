@@ -34,12 +34,16 @@ function injectCleanLinks() {
         diplodocDataRef.router.pathname = diplodocDataRef.router.pathname.replace('/index', '')
     }
 
-    diplodocTocDataRef.href = cleanLink(diplodocTocDataRef.href, options)
+    if (diplodocTocDataRef.href) {
+        diplodocTocDataRef.href = cleanLink(diplodocTocDataRef.href, options)
+    }
 
 
     function recursiveCleanLinks(items) {
         for (const item of items) {
-            item.href = cleanLink(item.href, options)
+            if (item.href) {
+                item.href = cleanLink(item.href, options)
+            }
 
             if (Array.isArray(item.items)) {
                 recursiveCleanLinks(item.items)
