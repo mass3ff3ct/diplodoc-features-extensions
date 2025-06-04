@@ -17,6 +17,7 @@
  *        # или
  *        breadcrumbs:
  *            tocAsRoot: boolean # если true, то корнем будет сам toc (title + href)
+ *            appendLabeled: boolean # если true, то будут добавлены labeled элементы, но без ссылки
  */
 function injectBreadcrumbs() {
     const diplodocDataRef = window.__DATA__
@@ -34,11 +35,11 @@ function injectBreadcrumbs() {
         return
     }
 
-    const options = Object.assign({}, {tocAsRoot: true}, diplodocTocDataRef.features.breadcrumbs)
+    const options = Object.assign({}, {tocAsRoot: true, appendLabeled: false}, diplodocTocDataRef.features.breadcrumbs)
     const route = diplodocDataRef.router.pathname
     const breadcrumbs = []
 
-    if (options.tocAsRoot) {
+    if (options.tocAsRoot && diplodocTocDataRef.title && diplodocTocDataRef.href) {
         breadcrumbs.push({
             name: diplodocTocDataRef.title,
             url: window.FEATURE_UTILS.urlWithoutExtension(diplodocTocDataRef.href)
@@ -47,7 +48,7 @@ function injectBreadcrumbs() {
 
     function recursiveFindItem(items) {
         for (const item of items) {
-            const url = window.FEATURE_UTILS.urlWithoutExtension(item.href)
+            const url = item.href ? window.FEATURE_UTILS.urlWithoutExtension(item.href) : void 0
 
             if (url === route) {
                 return [{ name: item.name, url: url,}]
@@ -55,7 +56,18 @@ function injectBreadcrumbs() {
                 const result = recursiveFindItem(item.items)
 
                 if (result.length > 0) {
-                    return [{name: item.name, url: url}, ...result]
+                    const breadcrumbItem = {name: item.name}
+
+                    if (!item.labeled) {
+                        breadcrumbItem.url = url
+                        return [breadcrumbItem, ...result]
+                    }
+
+                    if (options.appendLabeled) {
+                        return [breadcrumbItem, ...result]
+                    }
+
+                    return result
                 }
             }
         }

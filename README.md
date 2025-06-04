@@ -71,8 +71,8 @@ features:
   cleanLinks: true
   # или
   cleanLinks:
-    ext: boolean # удаляет расширение html
-    index: boolean # удаляет так же index
+    ext: boolean # удаляет расширение html (true по умолчанию)
+    index: boolean # удаляет так же index (true по умолчанию)
 ```
 
 #### Хлебные крошки
@@ -84,7 +84,8 @@ features:
   breadcrumbs: boolean
   #или
   breadcrumbs:
-    tocAsRoot: boolean #если true, то корнем будет сам toc (title + href)
+    tocAsRoot: boolean # если true, то корнем будет сам toc (title + href) (true по умолчанию)
+    appendLabeled: boolean # если true, то будут добавлены labeled элементы, но без ссылки (false по умолчанию)
 ```
 
 #### Фидбэк от пользователя
