@@ -71,7 +71,7 @@ function injectCleanLinks() {
         }
     }), true)
 
-    // Перехватчик для Worker. С измененными ссылками не правильно просчитывается измененная директория
+    // Перехватчик для Worker. С измененными ссылками не правильно просчитывается корневой путь до базового каталога
     const nativeWorkerPostMessage = window.Worker.prototype.postMessage
 
     window.Worker.prototype.postMessage = function (value, transferList) {
