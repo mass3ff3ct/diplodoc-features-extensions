@@ -30,6 +30,12 @@ function injectCleanLinks() {
 
     const options = Object.assign({}, {ext: true, index: true}, diplodocTocDataRef.features.cleanLinks)
 
+    if (!options.ext && !options.index) {
+        return
+    }
+
+    const originalRoute = diplodocDataRef.router.pathname
+
     if (options.ext && options.index) {
         diplodocDataRef.router.pathname = diplodocDataRef.router.pathname.replace('/index', '')
     }
@@ -64,6 +70,19 @@ function injectCleanLinks() {
             window.location.href = cleanLink(href, options)
         }
     }), true)
+
+    // Перехватчик для Worker. С измененными ссылками не правильно просчитывается измененная директория
+    const nativeWorkerPostMessage = window.Worker.prototype.postMessage
+
+    window.Worker.prototype.postMessage = function (value, transferList) {
+        if ('object' === typeof value && value.type && value.type === 'init') {
+            const originalUrl = new URL(originalRoute, window.location.origin)
+
+            value.base = originalUrl.href.split('/').slice(0, -value.depth).join('/')
+        }
+
+        nativeWorkerPostMessage.call(this, value, transferList)
+    }
 }
 
 const cleanAllExp = /(\/index)?\.html$/
