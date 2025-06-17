@@ -1,101 +1,82 @@
 
-Опубликованные скрипты позволяют активировать некоторые фичи (и даже больше), которые доступны только в облаке diplodoc, но не доступны при статической генерации!
+Опубликованные расширения позволяют активировать функционал, которые доступны только в облаке diplodoc, но не доступны при статической генерации!
 
-Данные скрипты являются временным, надеюсь, решением. После появления официальной поддержки их нужно будет отключить!
+Данные расширения являются временным решением. После появления официальной поддержки их нужно будет отключить!
 
-### Как это работает:
-Статичная сборка создает в каждом `.html` файле некий набор данных `window.__DATA__`
-
-Следом подключается `toc` файл и его содержимое присоединяется к `window.__DATA__.data.toc`
-
-Дальше стартует приложение, написанное на `react`, которое использует `window.__DATA__` для восстановления своего состояния
-
-`window.__DATA__` это `props` в понимании `react`, а значит можно прокинуть недостающие пропсы.
-Скрипты вклиниваются до запуска `react` приложения и изменяют `window.__DATA__`
-
-
-### Какие фичи поддерживаются:
-- Чистые ссылки без `index`, `index.html` и `.html` - `feature-clean-links.js`
-- Хлебные крошки - `feature-breadcrumbs.js`
-- Фидбэк от пользователей (like/dislike) - `feature-feedback.js`
-- Добавление кнопки на редактирование статьи (это просто ссылка, обычно в github) - `feature-vcs.js`
+### Расширения:
+- `clean-links` - Чистые ссылки без `index`, `index.html` и `.html``
+- `breadcrumbs` - Хлебные крошки
+- `feedback-control` - Кнопки like/dislike в статьях с возможностью отправки на указанный сервер
+- `vcs-control` - Кнопка на открытие статьи в режиме редактирования в любой vcs
 
 ### Как запустить:
 
-Добавить в `.yfm`
+Скопировать расширения из папки `dist` в корень своего проекта, например в папку `extensions`
+
+Вся работа по настройке происходит в файле `.yfm`
+
+Подключить расширения:
 ```yaml
-resources:
-  script:
-    - _assets/script/feature-base.js
-    - _assets/script/feature-clean-links.js
-    - _assets/script/feature-breadcrumbs.js
-    - _assets/script/feature-feedback.js
-    - _assets/script/feature-vcs.js
+extensions:
+  - './extensions/vcs-control/index.js'
+  - './extensions/feedback-control/index.js'
+  - './extensions/breadcrumbs/index.js'
+  - './extensions/clean-links/index.js'
 ```
 
-Добавить в `toc.yaml`
+Активировать расширения:
 ```yaml
-title: ...
-href: ...
-features:
-  breadcrumbs: true
-  feedback: true
-  vcs:
-    url: https://example.ru/-/blob/main/docs/{path}
-  cleanLinks: true
+
+vcsControl:
+  url: 'https://git.megoplan.ru/megaplan/help/-/edit/main/docs/{path}'
+  type: 'github'
+
+feedbackControl: true
+
+breadcrumbs: true
+
+cleanLinks: true
 ```
 
 Собрать статическую документацию
 ```bash
-yfm -i docs -o build --allow-custom-resources
+yfm -i docs -o build <ваши доп.параметры>
 ```
 
-Важно: если используете `feature-clean-links.js` лучше подключать его сразу после `feature-base.js`, т.к. он изменяет все ссылки
+Важно: если используете `clean-links`, то следует подключать его последним!
 
-Если есть потребность в сборке под разное окружение, то `presets.yaml` не подойдет, т.к. он просто не обработает свойство `features` в `toc.yaml`
-Однако можно выборочно подключить нужные ресурсы через `yfm`, тем самым подключив только нужные скрипты.
+Если есть необходимость настройки расширений под разное окружение, то используйте альтернативные файлы `.yfm`
 
-```bash
-yfm -i docs -o build \
-  --resource script:_assets/script/feature-base.js \
-  --resource script:_assets/script/feature-clean-lin.js \
-  #и т.д
-```
+### Настройки расширений
 
-### Настройки фич
-
-#### Чистые ссылки
+#### Чистые ссылки (clean-links)
 
 ```yaml
-features:
-  cleanLinks: true
-  # или
-  cleanLinks:
-    ext: boolean # удаляет расширение html (true по умолчанию)
-    index: boolean # удаляет так же index (true по умолчанию)
+cleanLinks: true
+# или
+cleanLinks:
+  ext: boolean # удаляет расширение html (true по умолчанию)
+  index: boolean # удаляет так же index (true по умолчанию)
 ```
 
-#### Хлебные крошки
+#### Хлебные крошки (breadcrumbs)
 
 ```yaml
-title: ...
-href: ...
-features:
-  breadcrumbs: boolean
-  #или
-  breadcrumbs:
-    tocAsRoot: boolean # если true, то корнем будет сам toc (title + href) (true по умолчанию)
-    appendLabeled: boolean # если true, то будут добавлены labeled элементы, но без ссылки (false по умолчанию)
+
+breadcrumbs: true
+#или
+breadcrumbs:
+  tocAsRoot: boolean # если true, то корнем будет сам toc (title + href) (true по умолчанию)
+  appendLabeled: boolean # если true, то будут добавлены labeled элементы не содержащие ссылок (false по умолчанию)
 ```
 
-#### Фидбэк от пользователя
+#### like/dislike от пользователя (feedback-control)
 
 ```yaml
-features:
-  feedback: boolean
-  # или
-  feedback:
-    sendUrl: https://example.com/feedback # Адрес для отправки данных методом POST
+feedback: boolean
+# или
+feedback:
+  sendUrl: https://example.com/feedback # Адрес для отправки данных методом POST
 ```
 
 Формат отправляемых данных:
@@ -109,12 +90,14 @@ features:
 }
 ```
 
-#### Редактирование (Vcs)
+Так же результат фидбека сохраняется у пользователя в `localStorage`.
+
+#### Редактирование (vcs-control)
 
 ```yaml
-features:
-  vcs:
-    url: https://example.com/{path}/edit # {path} подставляется автоматически и содержит путь к странице + .md
+vcs:
+  url: https://example.com/{path}/edit # {path} подставляется автоматически и содержит путь к странице + .md
+  type: 'github' # пока что допустим один из вариантов: github и arcanum. В целом это только визуальное оформление (иконки + подсказка)
 ```
 
 

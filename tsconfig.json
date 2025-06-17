@@ -1,0 +1,12 @@
+{
+  "extends": "@diplodoc/tsconfig",
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
