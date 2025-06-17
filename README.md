@@ -18,17 +18,17 @@
 Подключить расширения:
 ```yaml
 extensions:
-  - './extensions/vcs-control/index.js'
-  - './extensions/feedback-control/index.js'
-  - './extensions/breadcrumbs/index.js'
-  - './extensions/clean-links/index.js'
+  - './extensions/vcs-control'
+  - './extensions/feedback-control'
+  - './extensions/breadcrumbs'
+  - './extensions/clean-links'
 ```
 
 Активировать расширения:
 ```yaml
 
 vcsControl:
-  url: 'https://git.megoplan.ru/megaplan/help/-/edit/main/docs/{path}'
+  url: 'https://git.example.ru/{path}'
   type: 'github'
 
 feedbackControl: true
