@@ -55,6 +55,7 @@ function getBreadcrumbsMap(toc, config, breadcrumbCacheMap) {
 function createBreadcrumbsMap(toc, options) {
     const breadcrumbsMap = new Map();
     function processItem(item, currentPath) {
+        var _a;
         const breadcrumbItem = { name: item.name };
         if (item.href) {
             breadcrumbItem.url = (0, utils_1.setExt)(item.href, '');
@@ -62,7 +63,7 @@ function createBreadcrumbsMap(toc, options) {
         if (breadcrumbItem.url) {
             breadcrumbsMap.set(breadcrumbItem.url, [...currentPath, breadcrumbItem]);
         }
-        if (item.items?.length > 0) {
+        if (((_a = item.items) === null || _a === void 0 ? void 0 : _a.length) > 0) {
             const breadcrumbItems = !options.appendLabeled && item.labeled && !breadcrumbItem.url
                 ? [...currentPath]
                 : [...currentPath, breadcrumbItem];

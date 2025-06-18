@@ -31,10 +31,10 @@ window.feedbackControlExtensionInit = (options) => {
         return data ? JSON.parse(data) : null;
     };
     const localState = getLocalState();
-    if (localState?.type === 'like') {
+    if ((localState === null || localState === void 0 ? void 0 : localState.type) === 'like') {
         diplodocDataRef.data.isLiked = true;
     }
-    if (localState?.type === 'dislike') {
+    if ((localState === null || localState === void 0 ? void 0 : localState.type) === 'dislike') {
         diplodocDataRef.data.isDisliked = true;
     }
     diplodocDataRef.data.onSendFeedback = (data) => {

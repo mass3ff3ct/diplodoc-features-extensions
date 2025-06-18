@@ -2,8 +2,8 @@
   "extends": "@diplodoc/tsconfig",
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ESNext",
-    "lib": ["ESNext"],
+    "target": "ES2019",
+    "lib": ["ES2019"],
     "rootDir": "./src",
     "outDir": "./dist"
   },
