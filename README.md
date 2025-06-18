@@ -73,9 +73,9 @@ breadcrumbs:
 #### like/dislike от пользователя (feedback-control)
 
 ```yaml
-feedback: boolean
+feedbackControl: true
 # или
-feedback:
+feedbackControl:
   sendUrl: https://example.com/feedback # Адрес для отправки данных методом POST
 ```
 
@@ -95,7 +95,7 @@ feedback:
 #### Редактирование (vcs-control)
 
 ```yaml
-vcs:
+vcsControl:
   url: https://example.com/{path}/edit # {path} подставляется автоматически и содержит путь к странице + .md
   type: 'github' # пока что допустим один из вариантов: github и arcanum. В целом это только визуальное оформление (иконки + подсказка)
 ```
