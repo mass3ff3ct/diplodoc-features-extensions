@@ -1,23 +1,26 @@
-import { ok } from 'node:assert';
-import { getHooks as getBaseHooks } from '@diplodoc/cli/lib/program';
-import { getBuildHooks, getEntryHooks } from '@diplodoc/cli';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Extension = void 0;
+const node_assert_1 = require("node:assert");
+const program_1 = require("@diplodoc/cli/lib/program");
+const cli_1 = require("@diplodoc/cli");
 const vcsTypeSet = new Set(['github', 'arcanum', 'custom']);
 const urlPathVariable = '{path}';
-export class Extension {
+class Extension {
     apply(program) {
-        getBaseHooks(program).Config.tap('VcsControl', (config) => {
+        (0, program_1.getHooks)(program).Config.tap('VcsControl', (config) => {
             if (!config.vcsControl) {
                 return config;
             }
-            ok("object" === typeof config.vcsControl, 'vcsControl must be object');
-            ok("url" in config.vcsControl, 'vcsControl.url must be required');
-            ok("string" === typeof config.vcsControl.url, 'vcsControl.url must be not empty');
-            ok(config.vcsControl.url.includes(urlPathVariable), `vcsControl.url not contains template variable ${urlPathVariable}`);
-            ok(vcsTypeSet.has(config.vcsControl.type), `vcsControl.type must be one of ${Array.from(vcsTypeSet).join(', ')}`);
+            (0, node_assert_1.ok)("object" === typeof config.vcsControl, 'vcsControl must be object');
+            (0, node_assert_1.ok)("url" in config.vcsControl, 'vcsControl.url must be required');
+            (0, node_assert_1.ok)("string" === typeof config.vcsControl.url, 'vcsControl.url must be not empty');
+            (0, node_assert_1.ok)(config.vcsControl.url.includes(urlPathVariable), `vcsControl.url not contains template variable ${urlPathVariable}`);
+            (0, node_assert_1.ok)(vcsTypeSet.has(config.vcsControl.type), `vcsControl.type must be one of ${Array.from(vcsTypeSet).join(', ')}`);
             return config;
         });
-        getBuildHooks(program).BeforeRun.for('html').tapPromise('VcsControl', async (run) => {
-            getEntryHooks(run.entry).State.tap('VcsControl', (state) => {
+        (0, cli_1.getBuildHooks)(program).BeforeRun.for('html').tapPromise('VcsControl', async (run) => {
+            (0, cli_1.getEntryHooks)(run.entry).State.tap('VcsControl', (state) => {
                 if (!program.config.vcsControl) {
                     return state;
                 }
@@ -35,3 +38,4 @@ export class Extension {
         });
     }
 }
+exports.Extension = Extension;

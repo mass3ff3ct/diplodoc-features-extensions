@@ -1,6 +1,7 @@
 {
   "extends": "@diplodoc/tsconfig",
   "compilerOptions": {
+    "module": "CommonJS",
     "target": "ESNext",
     "lib": ["ESNext"],
     "rootDir": "./src",
