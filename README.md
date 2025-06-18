@@ -76,7 +76,7 @@ breadcrumbs:
 feedbackControl: true
 # или
 feedbackControl:
-  sendUrl: https://example.com/feedback # Адрес для отправки данных методом POST
+  endpoint: https://example.com/feedback # Адрес для отправки данных методом POST
 ```
 
 Формат отправляемых данных:
