@@ -54,7 +54,7 @@ class Extension {
                 const initOptions = {
                     route: (0, utils_1.setExt)(template.path, '')
                 };
-                template.addScript('/_extensions/clean-links-extension.js', {
+                template.addScript('_extensions/clean-links-extension.js', {
                     position: 'leading',
                     attrs: {
                         defer: void 0

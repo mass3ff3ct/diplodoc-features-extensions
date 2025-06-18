@@ -33,7 +33,7 @@ export class Extension implements IExtension {
             getEntryHooks(run.entry).Page.tap('FeedbackControl', (template) => {
                 const controlConfig = program.config.feedbackControl === true ? {} : program.config.feedbackControl
 
-                template.addScript('/_extensions/feedback-control-extension.js', {
+                template.addScript('_extensions/feedback-control-extension.js', {
                     position: 'leading',
                     attrs: {
                         defer: void 0
